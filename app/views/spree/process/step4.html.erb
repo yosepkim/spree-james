@@ -1,0 +1,82 @@
+<style>
+.item-box {
+	padding:20px;
+	border: 1px solid #999;
+	display: inline-block;
+	cursor: pointer;
+}
+.left-panel {
+	float:left;
+	min-width:250px;
+	min-height:120px;
+	border-right:3px solid #9FC820;
+}
+.right-panel {
+	float:left;
+	margin-left:40px;
+	max-width:500px
+}
+.clear {
+	clear:both;
+}
+</style>
+<script>
+$(document).ready(function () {
+	$('.item-box').click(function () {
+		var os_id = $(this).data('os-id');
+		$('#selected_value').val(os_id);
+		$('#os_type_form').submit();
+	});
+});
+</script>
+<div class="left-panel">
+	<%= link_to "Step1: Operating system", main_app.process_step1_path %> <%= session[:selected_os].blank? ? "" : Spree::OptionValue.find(session[:selected_os]).name %></br>
+	<%= link_to "Step2: CPU", main_app.process_step2_path %> <%= session[:selected_cpu].blank? ? "" : Spree::OptionValue.find(session[:selected_cpu]).name %></br>
+	<%= link_to "Step3: Memory", main_app.process_step3_path %> <%= session[:selected_memory].blank? ? "" : Spree::OptionValue.find(session[:selected_memory]).name %></br>
+</div>
+<div class="right-panel">
+	<h3>Step4: Matched Products</h3>
+	<div style="margin-top:20px">
+		<%= form_for :order, :url => populate_orders_path do |f| %>
+			<div id="inside-product-cart-form" data-hook="inside_product_cart_form" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+
+				<label for="<%= ['products', @product.id, @variant.id].join('_') %>">
+					<span class="variant-description">
+						<%= variant_options @variant %>
+					</span>
+				</label>
+								
+
+				<% if @product.price_in(current_currency) and !@product.price.nil? %>
+					<div data-hook="product_price" class="columns five <% if !@product.has_variants? %> alpha <% else %> omega <% end %>">
+				
+						<div id="product-price">
+							<h6 class="product-section-title"><%= Spree.t(:price) %></h6>
+							<div>
+								<span class="price selling" itemprop="price">
+									<%= display_price(@variant) %>
+								</span>
+								<span itemprop="priceCurrency" content="<%= @product.currency %>"></span>
+							</div>
+						</div>
+
+						<div class="add-to-cart">
+							<%= number_field_tag (@product.variants_and_option_values.any? ? :quantity : "variants[#{@product.master.id}]"),
+								1, :class => 'title', :min => 1 %>
+							<%= button_tag :class => 'large primary', :id => 'add-to-cart-button', :type => :submit do %>
+								<%= Spree.t(:add_to_cart) %>
+							<% end %>
+						</div>
+					</div>
+				<% else %>
+						<div id="product-price">
+							<br>
+							<div><span class="price selling" itemprop="price"><%= Spree.t('product_not_available_in_this_currency') %></span></div>
+						</div>
+				<% end %>    
+			</div>
+		<% end %>
+	</div>
+</div>
+<div class="clear"></div>
+

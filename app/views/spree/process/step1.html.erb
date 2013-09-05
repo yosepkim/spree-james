@@ -1,0 +1,49 @@
+<style>
+.item-box {
+	padding:20px;
+	border: 1px solid #999;
+	display: inline-block;
+	cursor: pointer;
+}
+.left-panel {
+	float:left;
+	min-width:250px;
+	min-height:120px;
+	border-right:3px solid #9FC820;
+}
+.right-panel {
+	float:left;
+	margin-left:40px;
+}
+.clear {
+	clear:both;
+}
+</style>
+<script>
+$(document).ready(function () {
+	$('.item-box').click(function () {
+		var os_id = $(this).data('os-id');
+		$('#selected_value').val(os_id);
+		$('#os_type_form').submit();
+	});
+});
+</script>
+<div class="left-panel">
+	<%= link_to "Step1: Operating system", main_app.process_step1_path %> <%= session[:selected_os].blank? ? "" : Spree::OptionValue.find(session[:selected_os]).name %></br>
+	<%= link_to "Step2: CPU", main_app.process_step2_path %> <%= session[:selected_cpu].blank? ? "" : Spree::OptionValue.find(session[:selected_cpu]).name %></br>
+	<%= link_to "Step3: Memory", main_app.process_step3_path %> <%= session[:selected_memory].blank? ? "" : Spree::OptionValue.find(session[:selected_memory]).name %></br>
+</div>
+<div class="right-panel">
+	<h3>Step1: Choose OS</h3>
+	<div style="margin-top:20px">
+		<%= form_tag main_app.process_step2_path, :id => "os_type_form", :method => :get do %>
+			<%= hidden_field_tag :selected_value %>
+			<% @options.each do |option| %>
+				<div class="item-box" data-os-id="<%= option.id %>">
+					<%= option.name %>
+				</div>
+			<% end %>
+		<% end %>
+	</div>
+</div>
+<div class="clear"></div>
