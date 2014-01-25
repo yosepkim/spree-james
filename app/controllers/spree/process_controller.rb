@@ -1,14 +1,15 @@
 module Spree
 	class ProcessController < Spree::StoreController
 		helper 'spree/products'
-    respond_to :html
+    #respond_to :html
     
 		def step1
 			#@searcher = build_searcher(params)
       #@products = @searcher.retrieve_products
       
       # get all OS types
-      @type = Spree::OptionType.where(:name => 'Operating System').first
+      @type = Spree::OptionType.find_by_name('Operating System')
+  
       if @type
       	@options = @type.option_values
       else

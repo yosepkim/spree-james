@@ -7,14 +7,16 @@
 }
 .left-panel {
 	float:left;
-	min-width:250px;
+	min-width:280px;
 	min-height:120px;
 	border-right:3px solid #9FC820;
+}
+.left-panel .option-choice {
+	font-size:12px;
 }
 .right-panel {
 	float:left;
 	margin-left:40px;
-	max-width:500px
 }
 .clear {
 	clear:both;
@@ -30,9 +32,9 @@ $(document).ready(function () {
 });
 </script>
 <div class="left-panel">
-	<%= link_to "Step1: Operating system", main_app.process_step1_path %> <%= session[:selected_os].blank? ? "" : Spree::OptionValue.find(session[:selected_os]).name %></br>
-	<%= link_to "Step2: CPU", main_app.process_step2_path %> <%= session[:selected_cpu].blank? ? "" : Spree::OptionValue.find(session[:selected_cpu]).name %></br>
-	<%= link_to "Step3: Memory", main_app.process_step3_path %> <%= session[:selected_memory].blank? ? "" : Spree::OptionValue.find(session[:selected_memory]).name %></br>
+	<%= link_to "Step1: Operating system", main_app.process_step1_path %> <span class="option-choice"><%= session[:selected_os].blank? ? "" : Spree::OptionValue.find(session[:selected_os]).name %></span></br>
+	<%= link_to "Step2: CPU", main_app.process_step2_path %> <span class="option-choice"><%= session[:selected_cpu].blank? ? "" : Spree::OptionValue.find(session[:selected_cpu]).name %></span></br>
+	<%= link_to "Step3: Memory", main_app.process_step3_path %> <span class="option-choice"><%= session[:selected_memory].blank? ? "" : Spree::OptionValue.find(session[:selected_memory]).name %></span></br>
 </div>
 <div class="right-panel">
 	<h3>Step4: Matched Products</h3>
